@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ryan Song | rysong</title>
+<style>
+:root{
+  --bg:#020409;
+  --bg2:#070d16;
+  --surface:rgba(255,255,255,.04);
+  --surface-2:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.08);
+  --line-2:rgba(132,188,201,.18);
+  --text:#f3f6fb;
+  --muted:#a4afbf;
+  --muted-2:#7f8b9d;
+  --accent:#84bcc9;
+  --accent-2:#d9f4ff;
+  --shadow:0 30px 90px rgba(0,0,0,.55);
+  --radius:30px;
+  --radius-sm:20px;
+  --max:1140px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,"SF Pro Display","PingFang SC","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(132,188,201,.12), transparent 22%),
+    radial-gradient(circle at 82% 18%, rgba(132,188,201,.08), transparent 20%),
+    radial-gradient(circle at 50% 84%, rgba(132,188,201,.06), transparent 26%),
+    linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+  overflow-x:hidden;
+  line-height:1.7;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.6), transparent 70%);
+  opacity:.45;
+}
+a{color:inherit;text-decoration:none}
+.container{width:min(var(--max), calc(100% - 40px));margin:0 auto}
+.nav{
+  position:sticky;top:0;z-index:30;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  background:rgba(2,4,9,.72);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{
+  width:40px;height:40px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg, rgba(132,188,201,.18), rgba(255,255,255,.05));
+  border:1px solid var(--line-2);font-weight:800;letter-spacing:.06em
+}
+.brand-title{font-weight:750;letter-spacing:-.02em}
+.brand-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.nav-links{display:flex;gap:22px;color:var(--muted);font-size:14px;flex-wrap:wrap;justify-content:center}
+.nav-links a{position:relative;padding:6px 0;transition:color .2s var(--ease)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transform-origin:center;transition:transform .25s var(--ease)}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.pill,.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 16px;border-radius:999px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);box-shadow:0 10px 30px rgba(0,0,0,.18);
+  transition:transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease)
+}
+.btn:hover,.pill:hover{transform:translateY(-2px);border-color:var(--line-2)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#061019;border:none;font-weight:750}
+.hero{padding:88px 0 60px;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:-12% auto auto 50%;transform:translateX(-50%);
+  width:1100px;height:760px;pointer-events:none;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(132,188,201,.18), transparent 22%),
+    radial-gradient(circle at 70% 30%, rgba(132,188,201,.10), transparent 24%),
+    radial-gradient(circle at 50% 72%, rgba(255,255,255,.06), transparent 34%);
+  filter:blur(22px);opacity:.9;animation:float 20s ease-in-out infinite alternate
+}
+.hero-grid{min-height:78vh;display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center;position:relative;z-index:1}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;padding:9px 14px;border-radius:999px;
+  background:rgba(132,188,201,.08);border:1px solid rgba(132,188,201,.16);
+  color:var(--accent);font-size:13px;font-weight:650;letter-spacing:.02em
+}
+h1{
+  margin:18px 0 0;font-size:clamp(56px,8.6vw,96px);line-height:.92;letter-spacing:-.08em;font-weight:850
+}
+.gradient{background:linear-gradient(135deg,#ffffff,var(--accent),#c9ebf4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{margin:22px 0 0;max-width:38rem;font-size:18px;color:var(--muted)}
+.subtitle em{font-style:normal;color:var(--text)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.tag{padding:8px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px}
+.hero-card{
+  position:relative;min-height:590px;padding:22px;border-radius:36px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  border:1px solid rgba(132,188,201,.12);box-shadow:var(--shadow);overflow:hidden;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+.hero-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:52px 52px;mask-image:linear-gradient(to bottom, rgba(0,0,0,.7), transparent 80%);opacity:.26
+}
+.avatar-wrap{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:18px}
+.avatar{
+  width:210px;height:210px;border-radius:34px;overflow:hidden;
+  background:linear-gradient(180deg, rgba(132,188,201,.16), rgba(255,255,255,.03));
+  border:1px solid rgba(132,188,201,.18);box-shadow:0 20px 50px rgba(0,0,0,.35)
+}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-quote{max-width:520px;font-size:24px;line-height:1.35;letter-spacing:-.04em;font-weight:650;margin:0}
+.hero-note{max-width:480px;color:var(--muted);line-height:1.8;margin:0}
+.section{padding:70px 0;position:relative}
+.section-title{margin:0;font-size:clamp(34px,4.8vw,60px);line-height:.98;letter-spacing:-.07em;font-weight:850}
+.section-sub{margin:14px 0 0;max-width:44rem;color:var(--muted);font-size:16px}
+.section-rule{height:1px;background:linear-gradient(90deg,transparent,rgba(132,188,201,.34),transparent);margin:22px 0 0}
+.editorial{
+  display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;margin-top:28px
+}
+.block{padding:28px;border-radius:var(--radius);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.025));border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.18)}
+.block h3{margin:0 0 10px;font-size:24px;letter-spacing:-.04em}
+.block p{margin:0;color:var(--muted)}
+.lead-quote{font-size:28px;line-height:1.45;letter-spacing:-.05em;color:var(--text);margin:0}
+.small-copy{margin-top:14px;color:var(--muted);font-size:15px}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,transparent,var(--accent),transparent)}
+.timeline-item{position:relative;padding:0 0 20px 26px}
+.timeline-item::before{content:"";position:absolute;left:-1px;top:8px;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 0 6px rgba(132,188,201,.12)}
+.year{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800}
+.timeline-item h4{margin:7px 0 8px;font-size:18px;letter-spacing:-.03em}
+.timeline-item p{margin:0;color:var(--muted)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  padding:24px;border-radius:28px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+  border:1px solid var(--line);box-shadow:0 16px 46px rgba(0,0,0,.18);transition:transform .28s var(--ease), border-color .28s var(--ease)
+}
+.card:hover{transform:translateY(-4px);border-color:rgba(132,188,201,.22)}
+.label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:20px;letter-spacing:-.03em}
+.card p{margin:0;color:var(--muted)}
+.matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.matrix .cell{padding:16px;border-radius:22px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.matrix strong{display:block;margin-bottom:5px}
+.matrix span{color:var(--muted);font-size:13px}
+.os{display:grid;gap:14px}
+.os-step{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:start;padding:16px;border-radius:22px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.os-num{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-weight:850;background:linear-gradient(135deg,rgba(132,188,201,.16),rgba(255,255,255,.04));border:1px solid rgba(132,188,201,.16)}
+.os-step h4{margin:0 0 5px;font-size:16px}
+.os-step p{margin:0;color:var(--muted);font-size:13px}
+.vision-shell{
+  margin-top:28px;padding:36px;border-radius:40px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--line)
+}
+.vision-shell::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 50% 12%, rgba(132,188,201,.16), transparent 26%), radial-gradient(circle at 50% 80%, rgba(132,188,201,.06), transparent 30%);
+  opacity:.9
+}
+.vision-stack{position:relative;max-width:820px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:20px}
+.vision-node{
+  width:min(100%, 660px);text-align:center;padding:28px 26px;border-radius:30px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(132,188,201,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)
+}
+.vision-node h3{margin:0 0 10px;font-size:28px;letter-spacing:-.04em}
+.vision-node p{margin:0;color:var(--muted);line-height:1.8}
+.connector{width:1px;height:34px;background:linear-gradient(to bottom, rgba(132,188,201,.5), transparent)}
+.value-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.value{padding:18px;border-radius:22px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.value strong{display:block;font-size:14px;margin-bottom:4px}
+.value span{color:var(--muted);font-size:13px}
+.contact-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:18px;align-items:stretch}
+.contact-item{display:flex;justify-content:space-between;gap:16px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.contact-item span{color:var(--muted);font-size:13px}
+.contact-item strong{font-size:14px}
+.qr{
+  display:grid;place-items:center;text-align:center;min-height:100%;padding:26px;border-radius:28px;
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.025));border:1px solid var(--line)
+}
+.qr-grid{width:180px;height:180px;border-radius:26px;padding:12px;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr);gap:3px;background:rgba(255,255,255,.02);border:1px solid var(--line)}
+.qr-grid i{display:block;border-radius:5px;background:transparent}
+.qr-grid i.on{background:var(--text)}
+.footer{padding:46px 0 62px;text-align:center;color:var(--muted);font-size:13px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease), transform .7s var(--ease)}
+.reveal.show{opacity:1;transform:translateY(0)}
+@keyframes float{from{transform:translateX(-50%) translateY(0)}to{transform:translateX(-50%) translateY(22px)}}
+@media (max-width: 1040px){
+  .hero-grid,.editorial,.grid-3,.contact-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero{padding-top:58px}
+  .hero-card{min-height:520px}
+  .value-row{grid-template-columns:1fr}
+}
+@media (max-width: 680px){
+  .container{width:min(var(--max), calc(100% - 24px))}
+  .section{padding:56px 0}
+  .hero{padding-bottom:30px}
+  h1{font-size:clamp(44px,14vw,72px)}
+  .subtitle{font-size:16px}
+  .matrix{grid-template-columns:1fr}
+  .os-step{grid-template-columns:1fr}
+  .os-num{width:56px;height:56px}
+  .avatar{width:180px;height:180px}
+  .hero-quote{font-size:22px}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="container nav-inner">
+    <div class="brand">
+      <div class="brand-mark">RS</div>
+      <div>
+        <div class="brand-title">宋瑞 Ryan Song</div>
+        <div class="brand-sub">Personal Operating System · rysong</div>
+      </div>
+    </div>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#about">About</a>
+      <a href="#system">System</a>
+      <a href="#projects">Projects</a>
+      <a href="#vision">Vision</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="pill" href="#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid reveal">
+      <div>
+        <div class="eyebrow">Minimal Black Interface · Inspired by Dan Koe</div>
+        <h1>Build systems.<br><span class="gradient">Think clearly.</span><br>Execute long-term.</h1>
+        <p class="subtitle">
+          我在 <em>HUD 海外项目管理</em>、<em>跨文化协作</em> 与 <em>AI 知识系统</em> 之间建立连接。<br>
+          我更关注：如何让复杂系统更稳定、让团队协作更清晰、让知识形成长期复利。
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="#about">About Me</a>
+          <a class="btn" href="#projects">Selected Projects</a>
+          <a class="btn" href="#vision">Vision</a>
+        </div>
+        <div class="meta-row">
+          <span class="tag">HUD Overseas PM</span>
+          <span class="tag">Cross-cultural Delivery</span>
+          <span class="tag">AI Workflow</span>
+          <span class="tag">Knowledge System</span>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="avatar-wrap">
+          <div class="avatar" aria-label="Ryan Song headshot"><img src="data:image/webp;base64,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" alt="Ryan Song" /></div>
+          <p class="hero-quote">Building systems that connect people, technology, and long-term execution.</p>
+          <p class="hero-note">像产品一样迭代自己，像系统一样构建人生。<br>A lifelong evolving operating system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="container reveal">
+      <h2 class="section-title">About Me / 关于我</h2>
+      <p class="section-sub">我不是以“职位”定义自己，而是以“长期形成什么样的能力系统”定义自己。</p>
+      <div class="section-rule"></div>
+      <div class="editorial">
+        <div class="block">
+          <div class="label">Background</div>
+          <h3>在复杂边界中建立确定性</h3>
+          <p>长期处于海外项目与技术协作场景中，我面对的是跨文化、跨组织、跨时区的复杂协同问题。我的核心能力不是单点执行，而是让复杂系统更稳定地运行。</p>
+        </div>
+        <div class="block">
+          <p class="lead-quote">我越来越相信，真正重要的不是证明自己能做多少事，而是成为一个长期可靠、持续进化的人。</p>
+          <p class="small-copy">AI 对我而言，不是“炫耀工具”，而是用于放大思考、整理与表达能力的基础设施。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="system" class="section">
+    <div class="container reveal">
+      <h2 class="section-title">Skills & System</h2>
+      <p class="section-sub">我更想展示的不是“我会什么”，而是“这些能力如何连接成一个系统”。</p>
+      <div class="section-rule"></div>
+      <div class="editorial">
+        <div class="block">
+          <div class="label">Capability Matrix</div>
+          <div class="matrix">
+            <div class="cell"><strong>项目管理</strong><span>推进、风险、复盘</span></div>
+            <div class="cell"><strong>跨文化沟通</strong><span>全球协同与共识</span></div>
+            <div class="cell"><strong>AI 工作流</strong><span>分析、总结、表达</span></div>
+            <div class="cell"><strong>知识管理</strong><span>长期积累与复利</span></div>
+          </div>
+        </div>
+        <div class="block">
+          <div class="label">Personal OS</div>
+          <div class="os">
+            <div class="os-step"><div class="os-num">01</div><div><h4>Capture</h4><p>记录项目、问题、阅读与灵感。</p></div></div>
+            <div class="os-step"><div class="os-num">02</div><div><h4>Organize</h4><p>建立结构化知识网络。</p></div></div>
+            <div class="os-step"><div class="os-num">03</div><div><h4>Reuse</h4><p>把知识重新应用到工作与决策。</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="container reveal">
+      <h2 class="section-title">Selected Projects</h2>
+      <p class="section-sub">不是项目目录，而是我如何解决问题、沉淀方法、构建复利的证明。</p>
+      <div class="section-rule"></div>
+      <div class="grid-3" style="margin-top:28px">
+        <div class="card">
+          <div class="label">Project</div>
+          <h3>国际项目交付协同</h3>
+          <p>优化跨时区与跨团队项目节奏，降低信息差与返工，建立更稳定的交付路径。</p>
+        </div>
+        <div class="card">
+          <div class="label">Project</div>
+          <h3>个人知识管理系统</h3>
+          <p>建立长期知识沉淀与 AI 辅助复盘机制，让经验转化成可检索、可复用的资产。</p>
+        </div>
+        <div class="card">
+          <div class="label">Project</div>
+          <h3>AI 工作流搭建</h3>
+          <p>把 AI 融入真实工作场景，提高信息处理、表达输出和决策整理的效率。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision" class="section">
+    <div class="container reveal">
+      <h2 class="section-title">Vision Architecture</h2>
+      <p class="section-sub">一个人的长期成长，不是目标列表，而是价值观、方向与行动方式逐渐形成一致。</p>
+      <div class="section-rule"></div>
+      <div class="vision-shell">
+        <div class="vision-stack">
+          <div class="vision-node" style="width:min(100%, 220px)">
+            <div class="label" style="margin-bottom:10px">Vision</div>
+            <h3 style="font-size:26px">终身成长</h3>
+            <p>Be a lifelong learner and practise mindfulness.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="vision-node" style="width:min(100%, 420px)">
+            <div class="label" style="margin-bottom:10px">Mission</div>
+            <h3>持续影响世界</h3>
+            <p>Positively influence others and the world by becoming a better self.</p>
+          </div>
+          <div class="connector"></div>
+          <div class="vision-node" style="width:min(100%, 680px)">
+            <div class="label" style="margin-bottom:14px">Core Value</div>
+            <div class="value-row">
+              <div class="value"><strong>Professional</strong><span>专业与可靠</span></div>
+              <div class="value"><strong>Proactive</strong><span>主动成长</span></div>
+              <div class="value"><strong>Open</strong><span>开放与连接</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container reveal">
+      <h2 class="section-title">Future Vision</h2>
+      <p class="section-sub">未来 5–10 年，我希望成为一个能够连接技术、团队、AI 与长期价值的人。</p>
+      <div class="section-rule"></div>
+      <div class="block" style="margin-top:28px">
+        <h3>AI 时代的系统型管理者</h3>
+        <p>我希望把复杂项目管理、全球化协作和 AI 知识系统整合成同一条长期成长路径。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="container reveal">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-sub">简洁、直接、可持续更新。</p>
+      <div class="section-rule"></div>
+      <div class="contact-grid" style="margin-top:28px">
+        <div class="block">
+          <h3>Let's build something durable.</h3>
+          <p>如果你正在寻找一个能够理解技术复杂度、跨文化协作与长期系统建设的人，欢迎联系我。</p>
+          <div style="display:grid;gap:12px;margin-top:18px">
+            <div class="contact-item"><span>Email</span><strong>your@email.com</strong></div>
+            <div class="contact-item"><span>LinkedIn</span><strong>linkedin.com/in/yourname</strong></div>
+            <div class="contact-item"><span>GitHub</span><strong>github.com/yourname</strong></div>
+          </div>
+        </div>
+        <div class="qr">
+          <div>
+            <div class="label" style="margin-bottom:12px">WeChat</div>
+            <div class="qr-grid" aria-label="微信二维码占位">
+              <i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i>
+              <i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i>
+              <i></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i>
+              <i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i>
+              <i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i>
+              <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i></i>
+            </div>
+            <p style="margin:16px 0 0;color:var(--muted);font-size:13px">WeChat QR placeholder</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">Ryan Song · rysong · Minimal / Future / Evolving</div>
+</footer>
+
+<script>
+(() => {
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('show');
+    });
+  }, { threshold: 0.14 });
+  revealEls.forEach(el => observer.observe(el));
+
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const activeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    });
+  }, { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 });
+  sections.forEach(section => activeObserver.observe(section));
+})();
+</script>
+</body>
+</html>"}]}]}
